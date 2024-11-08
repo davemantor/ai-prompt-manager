@@ -59,4 +59,35 @@ class PromptEditor {
             </button>
         `).join('');
     }
+
+    async savePrompt(prompt) {
+        await StorageService.savePrompt(prompt);
+    }
+
+    async loadPrompt(promptId) {
+        const prompt = await StorageService.getPromptById(promptId);
+        this.editor.setContent(prompt.content);
+    }
+
+    async importPrompts(prompts) {
+        for (const prompt of prompts) {
+            await StorageService.savePrompt(prompt);
+        }
+    }
+
+    async exportPrompts() {
+        const prompts = await StorageService.getAllPrompts();
+        return prompts;
+    }
+
+    async saveVersion(promptId, versionContent) {
+        const prompt = await StorageService.getPromptById(promptId);
+        prompt.versions.push(versionContent);
+        await StorageService.savePrompt(prompt);
+    }
+
+    async loadVersion(promptId, versionIndex) {
+        const prompt = await StorageService.getPromptById(promptId);
+        this.editor.setContent(prompt.versions[versionIndex]);
+    }
 }

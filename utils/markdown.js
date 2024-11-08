@@ -24,4 +24,14 @@ class MarkdownHandler {
             </div>
         `;
     }
+
+    async importMarkdown(markdown) {
+        const html = this.toHTML(markdown);
+        await StorageService.saveMarkdown(html);
+    }
+
+    async exportMarkdown() {
+        const markdown = await StorageService.getMarkdown();
+        return this.toMarkdown(markdown);
+    }
 }

@@ -40,7 +40,7 @@ class SidebarNavigation {
         });
     }
 
-    addPrompt() {
+    async addPrompt() {
         const promptId = prompt('Enter prompt ID:');
         if (promptId) {
             const promptItem = document.createElement('div');
@@ -48,11 +48,46 @@ class SidebarNavigation {
             promptItem.dataset.id = promptId;
             promptItem.textContent = `Prompt ${promptId}`;
             document.querySelector('.prompt-list').appendChild(promptItem);
+            await StorageService.savePrompt({ id: promptId, content: '' });
         }
     }
 
-    handlePromptClick(promptId) {
-        alert(`Prompt ${promptId} clicked`);
+    async handlePromptClick(promptId) {
+        const prompt = await StorageService.getPromptById(promptId);
+        alert(`Prompt ${promptId} clicked: ${prompt.content}`);
+    }
+
+    async importPrompts(prompts) {
+        for (const prompt of prompts) {
+            await StorageService.savePrompt(prompt);
+        }
+    }
+
+    async exportPrompts() {
+        const prompts = await StorageService.getAllPrompts();
+        return prompts;
+    }
+
+    async importFolders(folders) {
+        for (const folder of folders) {
+            await StorageService.saveFolder(folder);
+        }
+    }
+
+    async exportFolders() {
+        const folders = await StorageService.getAllFolders();
+        return folders;
+    }
+
+    async saveVersion(promptId, versionContent) {
+        const prompt = await StorageService.getPromptById(promptId);
+        prompt.versions.push(versionContent);
+        await StorageService.savePrompt(prompt);
+    }
+
+    async loadVersion(promptId, versionIndex) {
+        const prompt = await StorageService.getPromptById(promptId);
+        alert(`Loaded version ${versionIndex} of prompt ${promptId}: ${prompt.versions[versionIndex]}`);
     }
 }
 

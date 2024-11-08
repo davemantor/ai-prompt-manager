@@ -39,4 +39,15 @@ class PromptParser {
     formatPrompt(prompt) {
         return `Title: ${prompt.title}\nContent: ${prompt.content}\nTags: ${prompt.tags.join(', ')}\nFolder: ${prompt.folder}`;
     }
+
+    async importPrompts(prompts) {
+        for (const prompt of prompts) {
+            await StorageService.savePrompt(prompt);
+        }
+    }
+
+    async exportPrompts() {
+        const prompts = await StorageService.getAllPrompts();
+        return prompts;
+    }
 }

@@ -24,6 +24,12 @@ class SearchBar {
                     <label>
                         <input type="checkbox" name="dateRange" value="dateRange"> Date Range
                     </label>
+                    <label>
+                        <input type="checkbox" name="versionControl" value="versionControl"> Version Control
+                    </label>
+                    <label>
+                        <input type="checkbox" name="importExport" value="importExport"> Import/Export
+                    </label>
                 </div>
             </div>
         `;
@@ -53,7 +59,7 @@ class SearchBar {
     }
 
     async search(query, filters) {
-        const results = await this.searchEngine.search(query, filters);
+        const results = await StorageService.searchPrompts(query, filters);
         this.renderSearchResults(results);
     }
 

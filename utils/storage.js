@@ -68,4 +68,61 @@ class StorageService {
         const data = await chrome.storage.local.get('settings');
         return data.settings || {};
     }
+
+    async saveVersion(promptId, versionContent) {
+        const prompt = await this.getPromptById(promptId);
+        if (!prompt.versions) {
+            prompt.versions = [];
+        }
+        prompt.versions.push(versionContent);
+        return this.savePrompt(prompt);
+    }
+
+    async getVersion(promptId, versionIndex) {
+        const prompt = await this.getPromptById(promptId);
+        return prompt.versions ? prompt.versions[versionIndex] : null;
+    }
+
+    async importPrompts(prompts) {
+        for (const prompt of prompts) {
+            await this.savePrompt(prompt);
+        }
+    }
+
+    async exportPrompts() {
+        const prompts = await this.getAllPrompts();
+        return prompts;
+    }
+
+    async importFolders(folders) {
+        for (const folder of folders) {
+            await this.saveFolder(folder);
+        }
+    }
+
+    async exportFolders() {
+        const folders = await this.getAllFolders();
+        return folders;
+    }
+
+    async importTags(tags) {
+        for (const tag of tags) {
+            await this.saveTag(tag);
+        }
+    }
+
+    async exportTags() {
+        const tags = await this.getAllTags();
+        return Array.from(tags);
+    }
+
+    async importMarkdown(markdown) {
+        const html = new showdown.Converter().makeHtml(markdown);
+        return chrome.storage.local.set({ markdown: html });
+    }
+
+    async exportMarkdown() {
+        const data = await chrome.storage.local.get('markdown');
+        return new showdown.Converter().makeMarkdown(data.markdown || '');
+    }
 }

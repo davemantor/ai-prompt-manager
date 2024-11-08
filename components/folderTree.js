@@ -93,4 +93,15 @@ class FolderTree {
         };
         removeFolder(this.folders);
     }
+
+    async importFolders(folders) {
+        this.folders = folders;
+        await StorageService.saveFolders(folders);
+        this.render();
+    }
+
+    async exportFolders() {
+        const folders = await StorageService.getAllFolders();
+        return folders;
+    }
 }

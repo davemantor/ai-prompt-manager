@@ -43,4 +43,13 @@ class TagManager {
             <div class="tag-suggestion">${tag}</div>
         `).join('');
     }
+
+    async importTags(tags) {
+        this.tags = new Set(tags);
+        await this.saveTags();
+    }
+
+    async exportTags() {
+        return Array.from(this.tags);
+    }
 }

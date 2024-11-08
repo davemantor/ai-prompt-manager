@@ -27,6 +27,11 @@ class PromptManager {
         document.querySelector('.import-input').addEventListener('change',
             this.handleImport.bind(this)
         );
+
+        // Version Control
+        document.querySelector('.version-control-btn').addEventListener('click',
+            this.handleVersionControl.bind(this)
+        );
     }
 
     handleSearch(event) {
@@ -64,6 +69,10 @@ class PromptManager {
             };
             reader.readAsText(file);
         }
+    }
+
+    handleVersionControl() {
+        // Handle version control actions here
     }
 
     renderInterface() {
